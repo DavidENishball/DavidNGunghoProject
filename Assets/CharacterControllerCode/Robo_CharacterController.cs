@@ -10,11 +10,16 @@ public class Robo_CharacterController : MonoBehaviour {
     public bool isOnGround;
     public bool isPunching;
     public float maximumHorizontalSpeed;
+
+    public float baseHorizontalSpeed;
+
+    public float speedScale = 1;
+
     public float jumpVelocity;
 
     public float accelerationPerSecond = 1;
 
-    public float currentHorizontalSpeed = 0;
+    public Vector3 flattenedMovementDirection;
 
     public float groundedRaycastDistance = .2f;
 
@@ -24,7 +29,7 @@ public class Robo_CharacterController : MonoBehaviour {
     // Degrees per second at which the character turns.
     public float rotationSpeed = 720;
 
-    protected Rigidbody rigidbody;
+    public Rigidbody rigidbody;
 
 
 	// Use this for initialization
@@ -38,7 +43,7 @@ public class Robo_CharacterController : MonoBehaviour {
     public void CharacterMove(Vector3 movementDirection)
     {
         // Flatten the input to ensure horizontal movement.
-        Vector3 flattenedMovementDirection = movementDirection;
+        flattenedMovementDirection = movementDirection;
         flattenedMovementDirection.Scale(new Vector3(1, 1, 0));
         if (flattenedMovementDirection.sqrMagnitude != 1)
         {
@@ -46,8 +51,8 @@ public class Robo_CharacterController : MonoBehaviour {
         }
 
         CheckIfOnGround();
-        
 
+        maximumHorizontalSpeed = baseHorizontalSpeed * speedScale;
 
         rigidbody.velocity = flattenedMovementDirection * maximumHorizontalSpeed;
 
@@ -55,7 +60,7 @@ public class Robo_CharacterController : MonoBehaviour {
         {
             previousHorizontalVector = flattenedMovementDirection;
         }
-        currentHorizontalSpeed = Vector3.Scale(rigidbody.velocity, new Vector3(1, 0, 1)).magnitude;
+        //currentHorizontalSpeed = Vector3.Scale(rigidbody.velocity, new Vector3(1, 0, 1)).magnitude;
         //Debug.Log(rigidbody.velocity);
     }
 
@@ -64,14 +69,6 @@ public class Robo_CharacterController : MonoBehaviour {
         Debug.DrawRay(transform.position, rigidbody.velocity, Color.black, 0, false);
 	}
 
-    private void FixedUpdate()
-    {
-        if (previousHorizontalVector != Vector3.zero)
-        {
-            transform.forward =  Vector3.RotateTowards(transform.forward, previousHorizontalVector, Mathf.Deg2Rad * (Time.fixedDeltaTime * rotationSpeed), 360);
-            
-        }
-    }
 
     void CheckIfOnGround()
     {
