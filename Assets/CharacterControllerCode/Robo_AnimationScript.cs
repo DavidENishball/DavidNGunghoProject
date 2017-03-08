@@ -10,6 +10,7 @@ public class Robo_AnimationScript : MonoBehaviour {
     public const string ANIM_PROP_SPEED = "HorizontalMovementSpeed";
     public const string ANIM_PROP_GROUND = "OnGround";
     public const string ANIM_PROP_PUNCHING = "IsPunching";
+    public const string ANIM_PROP_JUMPING = "IsJumping";
 
     public float animationPlaySpeed;
     public float speedScaleDamping = 0.9f;
@@ -27,11 +28,21 @@ public class Robo_AnimationScript : MonoBehaviour {
         {
             character = GetComponent<Robo_CharacterController>();
         }
+
+        character.Jumped += Character_Jumped;
     }
 
-	
-	// Update is called once per frame
-	void Update ()
+    private void Character_Jumped(Robo_CharacterController argCharacter)
+    {
+        if (argCharacter == character)
+        {
+            animator.SetTrigger(ANIM_PROP_JUMPING);
+        }
+    }
+
+
+    // Update is called once per frame
+    void Update ()
     {
         
 
@@ -54,5 +65,7 @@ public class Robo_AnimationScript : MonoBehaviour {
             animator.speed = animationPlaySpeed;
         }
         animator.SetBool(ANIM_PROP_GROUND, character.isOnGround);
+        
     }
+
 }
