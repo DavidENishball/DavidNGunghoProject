@@ -42,14 +42,20 @@ public class RoboRunnerSceneManager : MonoBehaviour {
     public float playerScore = 0;
     #endregion
 
-    // Use this for initialization
-    void Start () {
-        // Singleton./
-		if (Instance != null)
+    private void Awake()
+    {
+        // Singleton.
+        
+        if (Instance != null)
         {
             Destroy(Instance);
         }
         Instance = this;
+
+    }
+
+    // Use this for initialization
+    void Start () {
 
         character = GameObject.FindObjectOfType<Robo_CharacterController>();
 
@@ -60,10 +66,10 @@ public class RoboRunnerSceneManager : MonoBehaviour {
 
     private void Character_Died(Robo_CharacterController character)
     {
-        scrollSpeed = 0;
+        ChangeGameState(EGameState.GAME_OVER);
     }
 
-    private void ChangeGameState(EGameState newState)
+    public void ChangeGameState(EGameState newState)
     {
         EGameState oldState = GameState;
         GameState = newState;
@@ -141,7 +147,7 @@ public class RoboRunnerSceneManager : MonoBehaviour {
 
     protected virtual void InternalStartGameOver()
     {
-        character.SetDead(true);
+        //character.SetDead(true);
         scrollSpeed = 0;
         
         // Display retry menu.

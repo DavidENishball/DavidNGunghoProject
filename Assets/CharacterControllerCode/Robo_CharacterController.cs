@@ -253,10 +253,18 @@ public class Robo_CharacterController : MonoBehaviour {
             // Spawn a particle.
 
             this.gameObject.SetActive(false);
+            if (Died != null)
+            {
+                Died.Invoke(this);
+            }
         }
         else
         {
             this.gameObject.SetActive(true);
+            if (Alive != null)
+            {
+                Alive.Invoke(this);
+            }
         }
     }
 
