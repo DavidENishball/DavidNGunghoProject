@@ -30,6 +30,7 @@ public class Robo_AnimationScript : MonoBehaviour {
         }
 
         character.Jumped += Character_Jumped;
+        character.PerformedPunch += Character_Punched;
     }
 
     private void Character_Jumped(Robo_CharacterController argCharacter)
@@ -37,6 +38,14 @@ public class Robo_AnimationScript : MonoBehaviour {
         if (argCharacter == character)
         {
             animator.SetTrigger(ANIM_PROP_JUMPING);
+        }
+    }
+
+    private void Character_Punched(Robo_CharacterController argCharacter)
+    {
+        if (argCharacter == character)
+        {
+            animator.SetTrigger(ANIM_PROP_PUNCHING);
         }
     }
 
@@ -65,6 +74,7 @@ public class Robo_AnimationScript : MonoBehaviour {
             animator.speed = animationPlaySpeed;
         }
         animator.SetBool(ANIM_PROP_GROUND, character.isOnGround);
+        
         
     }
 

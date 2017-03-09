@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Robo_InputHandler : MonoBehaviour {
 
+    public string JumpInputName = "Jump";
+    public string PunchInputName = "Fire1";
+
     public Robo_CharacterController character;
 
     // Determine if the input is relative to a transform, such as a camera.
@@ -24,7 +27,14 @@ public class Robo_InputHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (Input.GetButtonDown(JumpInputName))
+        {
+            character.JumpInput();
+        }
+        if (Input.GetButtonDown(PunchInputName))
+        {
+            character.PunchInput();
+        }
 	}
     private void FixedUpdate()
     {
