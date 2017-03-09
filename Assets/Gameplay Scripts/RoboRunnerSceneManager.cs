@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RoboRunnerSceneManager : MonoBehaviour {
 
+    public const string PLAYER_CHARACTER_TAG = "Player";
+
     public enum EGameState
     {
         READY,
