@@ -44,6 +44,8 @@ public class Robo_CharacterController : MonoBehaviour {
     public delegate void RoboCharacterControllerDelegate(Robo_CharacterController character);
     public event RoboCharacterControllerDelegate Jumped;
     public event RoboCharacterControllerDelegate PerformedPunch;
+    public event RoboCharacterControllerDelegate Died;
+    public event RoboCharacterControllerDelegate Alive;
 
     private bool jumpedThisFrame;
     private bool punchedThisFrame;
@@ -240,6 +242,21 @@ public class Robo_CharacterController : MonoBehaviour {
         if (crush)
         {
             Debug.Log("Object crushed by force " + squaredCrushingForce);
+            SetDead(true);
+        }
+    }
+
+    public void SetDead(bool isDead)
+    {
+        if (isDead)
+        {
+            // Spawn a particle.
+
+            this.gameObject.SetActive(false);
+        }
+        else
+        {
+            this.gameObject.SetActive(true);
         }
     }
 

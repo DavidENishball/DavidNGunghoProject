@@ -8,7 +8,14 @@ public class TrackCollisionsOnObject : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        collidingObjectDictionary.Add(collision.collider, collision);
+        if (collidingObjectDictionary.ContainsKey(collision.collider))
+        {
+            collidingObjectDictionary[collision.collider] = collision;
+        }
+        else
+        {
+            collidingObjectDictionary.Add(collision.collider, collision);
+        }
     }
 
     private void OnCollisionExit(Collision collision)
