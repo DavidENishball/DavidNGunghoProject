@@ -15,7 +15,7 @@ public class Robo_CharacterController : MonoBehaviour {
     public float basePunchDuration = .5f;
 
     public float horizontalSpeed;
-
+    public float punchDuration = .5f;
     public float speedScale = 1;
 
     public float accelerationPerSecond = 1;
@@ -24,9 +24,9 @@ public class Robo_CharacterController : MonoBehaviour {
 
     public float groundedRaycastDistance = .2f;
 
-    
 
-    public float punchDuration = .5f;
+    private float crushForceMagnitude = 45;
+
 
     // Allows you to make the character fall faster or slower relative to the rest of the game.
     [Range(0,5)]
@@ -54,11 +54,17 @@ public class Robo_CharacterController : MonoBehaviour {
 
     public bool allowInput = true;
 
+    public TrackCollisionsOnObject collisionTracker;
+
     // Use this for initialization
     void Start () {
         if (rigidbody == null)
         {
             rigidbody = GetComponent<Rigidbody>();
+        }
+        if (collisionTracker == null)
+        {
+            collisionTracker = GetComponent<TrackCollisionsOnObject>();
         }
 	}
 	
@@ -128,6 +134,11 @@ public class Robo_CharacterController : MonoBehaviour {
         }
     }
 
+    private void FixedUpdate()
+    {
+        CheckForCrush();
+    }
+
     IEnumerator PunchCoroutine()
     {
         isPunching = true;
@@ -187,9 +198,54 @@ public class Robo_CharacterController : MonoBehaviour {
         }
     }
 
+    void CheckForCrush()
+    {
+        if (collisionTracker == null) return;
+
+        // Determine if object is being crushed.
+        // Determine if there are any opposing vectors;
+        bool crush = false;
+        float squaredCrushingForce = 0;
+        List<Collision> listOfCollisions = new List<Collision>();
+        foreach (KeyValuePair<Collider, Collision> pair in collisionTracker.collidingObjectDictionary)
+        {
+            listOfCollisions.Add(pair.Value);
+        }
+
+        for (int i = 0; i < listOfCollisions.Count; i ++)
+        {
+            Collision leftCollision = listOfCollisions[i];
+            for (int j = i+ 1; j < collisionTracker.collidingObjectDictionary.Count; j++)
+            {
+                Collision rightCollision = listOfCollisions[j];
+                float dotProduct = Vector3.Dot(leftCollision.impulse, rightCollision.impulse);
+                // If the object is being acted on by two opposing forces.
+                if (dotProduct < -0.9f)
+                {
+
+                    squaredCrushingForce = leftCollision.impulse.sqrMagnitude + rightCollision.impulse.sqrMagnitude;
+                    if (squaredCrushingForce > crushForceMagnitude * crushForceMagnitude)
+                    {
+                        crush = true;
+                        break;
+                    }
+                }
+            }
+            if (crush)
+            {
+                break;
+            }
+        }
+
+        if (crush)
+        {
+            Debug.Log("Object crushed by force " + squaredCrushingForce);
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("hit by " + collision.collider.name);
+        Debug.Log("hit by " + collision.collider.name + " at force " + collision.contacts[0].normal );
     }
 
     private void OnCollisionExit(Collision collision)
@@ -199,6 +255,6 @@ public class Robo_CharacterController : MonoBehaviour {
 
     private void OnCollisionStay(Collision collision)
     {
-
+        
     }
 }
