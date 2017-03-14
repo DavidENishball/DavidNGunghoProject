@@ -12,6 +12,10 @@ public class FakeLevelScrolling : MonoBehaviour {
     public bool wrapWhenExitingSceneBounds = false;
     public bool debugDontDestroyOnSceneStart = false;
 
+    public float minimumXCoordinate = -35;
+
+    public float maximumXCoordinate = 35;
+
     public Vector3 simulatedVelocity;
 
     private void Awake()
@@ -54,7 +58,26 @@ public class FakeLevelScrolling : MonoBehaviour {
         Vector3 simulatedVelocityOffset = simulatedVelocity * Time.deltaTime;
 
         transform.position += (scrolledOffset + simulatedVelocityOffset);
+
+        if (transform.position.x < minimumXCoordinate)
+        {
+            OnExitedLevelBounds();
+        }
 	}
+
+    protected void OnExitedLevelBounds()
+    {
+        if(wrapWhenExitingSceneBounds)
+        {
+            Vector3 pos = transform.position;
+            pos.x = maximumXCoordinate;
+            transform.position = pos;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     void OnDestroy()
     {
