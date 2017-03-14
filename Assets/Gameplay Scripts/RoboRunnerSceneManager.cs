@@ -164,6 +164,13 @@ public class RoboRunnerSceneManager : MonoBehaviour {
 
     public virtual void ResetGameplayObjects()
     {
+        foreach (FakeLevelScrolling s in FakeLevelScrolling.GameplayObjectSet)
+        {
+            if (!s.debugDontDestroyOnSceneStart || Time.time > 1)
+            {
+                Destroy(s.gameObject);
+            }
+        }
         character.SetDead(false);
         character.allowInput = false;
         character.transform.position = playerSpawnTransform.position;

@@ -261,6 +261,7 @@ public class Robo_CharacterController : MonoBehaviour {
         else
         {
             this.gameObject.SetActive(true);
+            collisionTracker.collidingObjectDictionary.Clear();
             if (Alive != null)
             {
                 Alive.Invoke(this);

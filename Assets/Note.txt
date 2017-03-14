@@ -12,8 +12,13 @@ Include a full game loop.
 Game concept: endless runner.
 
 Tasks for monday:
-Create shader.
 Spawn and despawn obstacles.
 Create punchable objects (crates?)
 Add background for good scrolling.
+title Screen.
+Reset spawned objects.
 Add fade in and fade out.
+
+
+Object spawner:
+Prefabs that are configurations of obstacles.
