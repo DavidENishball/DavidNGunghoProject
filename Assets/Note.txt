@@ -11,32 +11,9 @@ Include a full game loop.
 
 Game concept: endless runner.
 
-Will automatically walk right.  Can jump, stop, or punch.
-
-Need to update the animator each frame or so.
-
-
-Task List:
-
-Have robo move relative to the frame of the screen.
-- Walks in place when there's no movement.
-- Stands still and moves backwards when there's left input.
-- Increases walk speed when there's forward input.
-
-
-Problem: How to ensure that robo's animation matches the speed of the game.
-
-Case 1: 0 scroll speed, zero input.  Return one.
-
-Negative -1 input always equals 0
-Zero input always equals the value.
-Positive input always equals twice the value.
-
-Edge case: zero scroll speed.
-
-Adjust the animation until it's precisely one meter per second.
-
-Create "Force scroll" component.
-Spawn smashable obstacles.
-Spawn deadly obstacles.
-Handle robot being crushed.
+Tasks for monday:
+Create shader.
+Spawn and despawn obstacles.
+Create punchable objects (crates?)
+Add background for good scrolling.
+Add fade in and fade out.
