@@ -27,13 +27,17 @@ public class Robo_InputHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown(JumpInputName))
+        // Only send messages if the character is receptive to input.
+        if (character.allowInput)
         {
-            character.JumpInput();
-        }
-        if (Input.GetButtonDown(PunchInputName))
-        {
-            character.PunchInput();
+            if (Input.GetButtonDown(JumpInputName))
+            {
+                character.JumpInput();
+            }
+            if (Input.GetButtonDown(PunchInputName))
+            {
+                character.PunchInput();
+            }
         }
 	}
     private void FixedUpdate()

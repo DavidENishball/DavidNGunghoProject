@@ -14,11 +14,9 @@ Game concept: endless runner.
 Tasks for monday:
 Spawn and despawn obstacles.
 Create punchable objects (crates?)
-Add background for good scrolling.
 title Screen.
 Reset spawned objects.
-Add fade in and fade out.
 
 
-Object spawner:
-Prefabs that are configurations of obstacles.
+Object Spawner:
+Randomly spawn platforms, barrels, and saws over time at varying heights. No time for designed levels.

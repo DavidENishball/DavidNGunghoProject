@@ -50,9 +50,10 @@ public class Robo_CharacterController : MonoBehaviour {
     private bool jumpedThisFrame;
     private bool punchedThisFrame;
 
-    protected Vector3 punchOffset;
-    protected Vector3 punchDimensions;
-
+    
+    public Vector3 punchOffset;
+    public Vector3 punchDimensions;
+    public Vector3 punchForce = new Vector3(0, 70, 600);
 
     public bool allowInput = true;
 
@@ -120,20 +121,22 @@ public class Robo_CharacterController : MonoBehaviour {
 
     public void JumpInput()
     {
-        if (isOnGround)
-        {
-            jumpedThisFrame = true;
-        }
+
+            if (isOnGround)
+            {
+                jumpedThisFrame = true;
+            }
 
     }
 
     public void PunchInput()
-    {
-        if (!isPunching)
-        {
-            punchedThisFrame = true;
-            StartCoroutine(PunchCoroutine());
-        }
+    { 
+            if (!isPunching)
+            {
+                punchedThisFrame = true;
+                StartCoroutine(PunchCoroutine());
+            }
+        
     }
 
     private void FixedUpdate()
@@ -148,8 +151,9 @@ public class Robo_CharacterController : MonoBehaviour {
         {
             PerformedPunch.Invoke(this);
         }
-        
+       
         yield return new WaitForSeconds(punchDuration);
+        PunchEffect();
         isPunching = false;
     }
 
@@ -162,7 +166,12 @@ public class Robo_CharacterController : MonoBehaviour {
             RaycastHit foundHit = hits[i];
 
             GameObject otherGameObject =  foundHit.collider.gameObject;
-            // Implement hitable interface.
+            PunchableObject p = otherGameObject.GetComponent<PunchableObject>();
+            if (p != null)
+            {
+                p.IsPunched(transform.position, transform.rotation * punchForce);
+                
+            }
         }
     }
 
