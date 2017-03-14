@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+
 public class RoboRunnerUICanvasScript : MonoBehaviour {
 
     public const string SCORE_FORMAT = "SCORE: {0}";
@@ -13,7 +15,7 @@ public class RoboRunnerUICanvasScript : MonoBehaviour {
     public Button RetryButton;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         RoboRunnerSceneManager.Instance.SceneManagerStateChanged += Instance_SceneManagerStateChanged;
 	}
 
@@ -21,14 +23,19 @@ public class RoboRunnerUICanvasScript : MonoBehaviour {
     {
         if (manager.GameState == RoboRunnerSceneManager.EGameState.GAME_OVER)
         {
-            gameOverMenuRoot.SetActive(true);
-            RetryButton.Select();
-            scoreDisplay.gameObject.SetActive(false);
+            StartCoroutine(GameOverCoroutine());
         }
-        else
+        else if (manager.GameState == RoboRunnerSceneManager.EGameState.PLAYING)
         {
             gameOverMenuRoot.SetActive(false);
             scoreDisplay.gameObject.SetActive(true);
+            readyPrompt.gameObject.SetActive(false);
+        }
+        else if (manager.GameState == RoboRunnerSceneManager.EGameState.READY)
+        {
+            gameOverMenuRoot.SetActive(false);
+            scoreDisplay.gameObject.SetActive(true);
+            readyPrompt.gameObject.SetActive(true);
         }
 
 
@@ -59,6 +66,17 @@ public class RoboRunnerUICanvasScript : MonoBehaviour {
 
     public void QuitButtonClicked()
     {
-        // Go to original scene.
+        SceneManager.LoadScene(0);
+    }
+
+    public IEnumerator GameOverCoroutine()
+    {
+        // Ensures a delay before the menu appears, to prevent the player from accidentally hitting a button
+        yield return new WaitForSeconds(1f);
+        gameOverMenuRoot.SetActive(true);
+        RetryButton.Select();
+        scoreDisplay.gameObject.SetActive(true);
+        readyPrompt.gameObject.SetActive(false);
+
     }
 }
